@@ -8,7 +8,7 @@ import sys
 setup(
     name = "ACE-calc",
     packages = find_packages(),
-    version = "0.0.1.dev0"
+    version = "0.0.1.dev0", 
     install_requires = [],
     python_requires = ">=3.6",
     author = "xystudio",
