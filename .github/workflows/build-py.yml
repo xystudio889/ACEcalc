@@ -1,0 +1,141 @@
+name: Build Python
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller pygame
+
+    - name: Create Windows build
+      run: |
+        pyinstaller --onefile --windowed --name "ACEcalc-windows" "ACEcalc.py"
+
+    - name: Upload Windows build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ACEcalc-windows
+        path: dist/ACEcalc-windows.exe
+
+    - name: Upload windows spec artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ACEcalc-spec-windows
+        path: ACEcalc-windows.spec
+
+    - name: Create draft release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: github_actions_release
+        name: "Release file by GitHub Actions"
+        draft: true
+        files: |
+          dist/ACEcalc-windows.exe
+          ACEcalc-windows.spec
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller pygame
+
+      - name: Create linux build
+        run: |
+          pyinstaller --onefile --windowed --name "ACEcalc-linux" "ACEcalc.py"
+
+      - name: Upload linux build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ACEcalc-linux
+          path: dist/ACEcalc-linux
+
+      - name: Upload linux spec artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ACEcalc-spec-linux
+          path: ACEcalc-linux.spec
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: github_actions_release
+          name: "Release file by GitHub Actions"
+          draft: true
+          files: |
+            dist/ACEcalc-linux
+            ACEcalc-linux.spec
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller pygame Pillow
+
+    - name: Create macOS build
+      run: |
+        pyinstaller --onefile --windowed --name "ACEcalc-macos" "ACEcalc.py"
+  
+    - name: Upload macos build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ACEcalc-macos
+        path: dist/ACEcalc-macos
+    
+    - name: Upload macos spec artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ACEcalc-spec-macos
+        path: ACEcalc-macos.spec
+
+    - name: Create draft release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: github_actions_release
+        name: "Release file by GitHub Actions"
+        draft: true
+        files: |
+          dist/ACEcalc-macos
+          ACEcalc-macos.spec
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

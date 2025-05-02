@@ -1,15 +1,14 @@
 from setuptools import setup, find_packages
 import sys
-from ACE_calc import __version__
 
-data_files = []
-if sys.platform == "win32":
-    data_files = [('Scripts', ['scripts/ace.exe'])]
+# data_files = []
+# if sys.platform == "win32":
+#     data_files = [('Scripts', ['scripts/ace.exe'])]
 
 setup(
     name = "ACE-calc",
     packages = find_packages(),
-    version = __version__,
+    version = "0.0.1.dev0"
     install_requires = [],
     python_requires = ">=3.6",
     author = "xystudio",
@@ -18,6 +17,5 @@ setup(
     long_description = open("README.md",encoding="utf-8").read(),
     license = "MIT",
     url = "https://github.com/xystudio889/ACECalc",
-    data_files = data_files,
     include_package_data = True
 )
