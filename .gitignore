@@ -5,8 +5,6 @@ __pycache__/
 
 scripts/
 output/
-ACEcalc.pyw
-
 # C extensions
 *.so
 
